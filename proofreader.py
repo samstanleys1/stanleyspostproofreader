@@ -201,7 +201,7 @@ def load_reference_data(languages: list[str]) -> str:
     return header + "\n\n".join(parts)
 
 
-def compress_image(path: Path, max_dimension: int = 4000, quality: int = 90) -> bytes:
+def compress_image(path: Path, max_dimension: int = 5000, quality: int = 95) -> bytes:
     """Compress an image to reduce file size while maintaining quality for analysis."""
     img = Image.open(path)
 

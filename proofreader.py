@@ -251,7 +251,7 @@ def encode_file(path: Path) -> tuple[str, str]:
     return base64.standard_b64encode(data).decode("utf-8"), mime_type
 
 
-def build_content_blocks(image_path: Path, guidelines_path: Path | None, languages: str, asset_type: str = "General") -> list[dict]:
+def build_content_blocks(image_path: Path, guidelines_path: Path | None, languages: str, asset_type: str = "General", is_prime_original: bool = False) -> list[dict]:
     """Build the content blocks for the Claude API request."""
     blocks = []
 
@@ -269,6 +269,11 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
     asset_info = f"Above is the image to proofread. Expected languages: {languages}."
     if asset_type and asset_type != "General":
         asset_info += f"\n\nAsset Type: {asset_type}\nIMPORTANT: Apply the specific compliance rules for this asset type (e.g., color mode requirements, logo placement rules, etc.)."
+
+    if is_prime_original:
+        asset_info += "\n\nContent Type: PRIME ORIGINAL\nIMPORTANT: This is Prime Original content. The 'Prime Original' logo MUST appear above the title treatment, and 'Original' must NOT appear in the CTA (to avoid redundancy)."
+    else:
+        asset_info += "\n\nContent Type: NON-PRIME ORIGINAL\nIMPORTANT: This is NOT Prime Original content. Only the 'Prime' logo should appear above the title treatment, and 'Original' MUST appear in the CTA."
 
     blocks.append({
         "type": "text",
@@ -385,6 +390,8 @@ def main():
     parser.add_argument("--asset-type", type=str, default="General",
                         choices=["General", "LRD", "OOH", "DOOH", "Digital Display", "Companion Banners", "T-Sides"],
                         help='Type of asset (default: "General")')
+    parser.add_argument("--prime-original", action="store_true",
+                        help="Flag if this is Prime Original content (affects logo and CTA requirements)")
     parser.add_argument("--output", type=Path, default=None, help="Save report to a file")
     args = parser.parse_args()
 
@@ -404,7 +411,7 @@ def main():
 
     # Build and send API request
     client = anthropic.Anthropic()
-    content = build_content_blocks(args.image, args.guidelines, args.languages, args.asset_type)
+    content = build_content_blocks(args.image, args.guidelines, args.languages, args.asset_type, args.prime_original)
 
     print(f"Analyzing {args.image.name}...", file=sys.stderr)
     response = client.messages.create(

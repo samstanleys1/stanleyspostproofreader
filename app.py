@@ -62,6 +62,12 @@ with st.sidebar:
         help="Select the type of asset to apply specific compliance rules",
     )
 
+    is_prime_original = st.checkbox(
+        "Prime Original content",
+        value=False,
+        help="Check if this is a Prime Original movie/series (affects logo and CTA requirements)",
+    )
+
     guidelines_file = st.file_uploader(
         "Brand guidelines (optional)",
         type=["pdf", "png", "jpg", "jpeg", "webp"],
@@ -122,7 +128,7 @@ if uploaded_images:
                 tmp_img_path = Path(tmp_img.name)
 
             with st.spinner(f"Analyzing {uploaded_image.name}..."):
-                content = build_content_blocks(tmp_img_path, guidelines_path, languages_str, asset_type)
+                content = build_content_blocks(tmp_img_path, guidelines_path, languages_str, asset_type, is_prime_original)
 
                 response = client.messages.create(
                     model="claude-sonnet-4-5-20250929",

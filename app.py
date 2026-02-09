@@ -11,6 +11,7 @@ import anthropic
 import streamlit as st
 
 from proofreader import (
+    BRAND_GUIDELINES_PATH,
     LANGUAGE_TO_CTA_SHEET,
     SYSTEM_PROMPT,
     build_content_blocks,
@@ -50,6 +51,10 @@ with st.sidebar:
         type=["pdf", "png", "jpg", "jpeg", "webp"],
     )
 
+    # Show info if default guidelines exist
+    if BRAND_GUIDELINES_PATH.exists() and guidelines_file is None:
+        st.info(f"✓ Using default brand guidelines: {BRAND_GUIDELINES_PATH.name}")
+
 # --------------- main area ---------------
 uploaded_image = st.file_uploader(
     "Upload an image to proofread",
@@ -77,6 +82,9 @@ if uploaded_image is not None:
             ) as tmp_guide:
                 tmp_guide.write(guidelines_file.getvalue())
                 guidelines_path = Path(tmp_guide.name)
+        elif BRAND_GUIDELINES_PATH.exists():
+            # Auto-load default brand guidelines if no custom file uploaded
+            guidelines_path = BRAND_GUIDELINES_PATH
 
         languages_str = ", ".join(languages) if languages else "English"
 

@@ -17,6 +17,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REFERENCES_DIR = SCRIPT_DIR / "references"
 EMEA_PATH = REFERENCES_DIR / "EMEA Messaging Matrix-2[95].xlsx"
 GLOBAL_CTA_PATH = REFERENCES_DIR / "Global_CTA_Matrix_Original Movies  Series_MASTER_ Dropdown_8.1.25-2.xlsx"
+BRAND_GUIDELINES_PATH = REFERENCES_DIR / "brand_guidelines.pdf"
 
 SYSTEM_PROMPT = """You are an expert proofreader and brand compliance reviewer. You will be given an image (product packaging, marketing material, etc.) and possibly a brand guidelines document.
 
@@ -337,6 +338,12 @@ def main():
     if not args.image.exists():
         print(f"Error: Image file not found: {args.image}", file=sys.stderr)
         sys.exit(1)
+
+    # Auto-load default brand guidelines if not explicitly specified
+    if args.guidelines is None and BRAND_GUIDELINES_PATH.exists():
+        args.guidelines = BRAND_GUIDELINES_PATH
+        print(f"Auto-loading brand guidelines: {BRAND_GUIDELINES_PATH.name}", file=sys.stderr)
+
     if args.guidelines and not args.guidelines.exists():
         print(f"Error: Guidelines file not found: {args.guidelines}", file=sys.stderr)
         sys.exit(1)

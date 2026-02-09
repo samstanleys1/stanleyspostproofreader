@@ -12,6 +12,8 @@ from pathlib import Path
 
 import anthropic
 import openpyxl
+from PIL import Image
+import io
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REFERENCES_DIR = SCRIPT_DIR / "references"
@@ -199,6 +201,31 @@ def load_reference_data(languages: list[str]) -> str:
     return header + "\n\n".join(parts)
 
 
+def compress_image(path: Path, max_dimension: int = 4000, quality: int = 90) -> bytes:
+    """Compress an image to reduce file size while maintaining quality for analysis."""
+    img = Image.open(path)
+
+    # Convert RGBA to RGB if necessary
+    if img.mode == 'RGBA':
+        background = Image.new('RGB', img.size, (255, 255, 255))
+        background.paste(img, mask=img.split()[3])
+        img = background
+    elif img.mode != 'RGB':
+        img = img.convert('RGB')
+
+    # Resize if image is too large
+    width, height = img.size
+    if max(width, height) > max_dimension:
+        ratio = max_dimension / max(width, height)
+        new_size = (int(width * ratio), int(height * ratio))
+        img = img.resize(new_size, Image.Resampling.LANCZOS)
+
+    # Compress to JPEG
+    buffer = io.BytesIO()
+    img.save(buffer, format='JPEG', quality=quality, optimize=True)
+    return buffer.getvalue()
+
+
 def encode_file(path: Path) -> tuple[str, str]:
     """Read a file and return (base64_data, media_type)."""
     mime_type, _ = mimetypes.guess_type(str(path))
@@ -214,7 +241,13 @@ def encode_file(path: Path) -> tuple[str, str]:
         }
         mime_type = mime_map.get(suffix, "application/octet-stream")
 
-    data = path.read_bytes()
+    # Compress images to reduce request size
+    if mime_type and mime_type.startswith("image/"):
+        data = compress_image(path)
+        mime_type = "image/jpeg"  # Always return JPEG after compression
+    else:
+        data = path.read_bytes()
+
     return base64.standard_b64encode(data).decode("utf-8"), mime_type
 
 

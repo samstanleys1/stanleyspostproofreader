@@ -1,0 +1,117 @@
+CONTEXT:
+We are a company that develops advertisements for Amazon Prime. We create an asset, such as a movie poster, and adapt it for many different markets. This includes different countries and therefore different languages. Our assets cover many different forms of media, such as print and digitaL.
+
+DEFINITION OF TERMS:
+Key art - the main image or design.
+Container - the blue box that that comes outside of the key art
+Border - The blue border that comes from the container and surrounds the key art
+Title Treatment - The wording of the series/movie. Often designed and given no particular font
+Logo - The Amazon Prime or Prime wording that goes in the container and alongside CTA
+Prime Original Logo - The Prime Original wording that goes above the title treatment on amazon original series
+CTA - Call to action. Wording that tells the viewer information such as the date it launches or the product amazon is launching (i.e. new movie, new series, new season)
+PRE CTA - Call to action, but before the product is available. Will always have a date for when the show/series/movie is avaiable to watch. Will also include a description of what the product is (i.e. new movie, new series, new season)
+POST CTA - Call to action, but after the product has launched. Will not display a date, but instead a call to view the product (i.e. watch now, available to buy, now available)
+OOH - Out of home, therefore product needs to be suitable for print output. Must be in CMYK
+DOOH - Digital out of home, therefore product needs to be suitable for digital output. Must be in RGB
+Breakout - When an element from the key art breaks into the container. I.e. a head or an arm, to give a 3D effect.
+LRD - Living Room Display. These are adaptations of our images that will appear as advertisements on Smart TVs.
+Digital Display - These are adaptations of our images that will appear on digital screens placed across various locations.
+Companion Banners - Adaptations of our images, that will often sit besides a video. Often a part of the LRD batch.
+T-Sides - Adaptations of our images that will be placed on the side of a London Bus. Often shaped like a T and therefore requires specific adaptation of elements.
+
+
+  COLORS:
+The following elements must follow either one of the colours listed
+Container
+Logo
+CTA
+PRE CTA
+POST CTA
+  - PRIME BLUE
+HEX: #0578FF
+RGB: 5, 120, 255
+CMYK: 88, 45, 0, 0
+PMS C: 2172
+PMS U: 2184
+DARK SQUID INK
+HEX: #0f141a
+RGB: 15, 20, 26
+CMYK: 95, 70, 0, 85
+PMS C: 4146
+PMS U: 2767
+WHITE
+HEX: #FFFFFF
+RGB: 255, 255, 255
+OFF-WHITE
+HEX: #F5F3EF
+RGB: 245, 243, 239
+BLACK
+HEX: #000000
+RGB: 0, 0, 0
+
+
+
+  FONTS/TYPOGRAPHY:
+  - CTA
+PRE CTA TYPICAL EXAMPLE: NEW ORIGINAL SERIES  |  MONTH XX
+POST CTA TYPICAL EXAMPLE: NEW ORIGIANAL SERIES  |  WATCH NOW
+FIRST HALF OF CTA MUST BE USING EMBER MODERN DISPLAY STANDARD BOLD FONT
+SECOND HALF OF CTA MUST BE USING EMBER MODERN DISPLAY STANDARD REGULAR
+
+  LOGO REQUIREMENTS:
+  - AMAZON PRIME/PRIMI LOGO MUST BE INCLUDED ON ALL DELIVERABLES. BUT MUST NOT BE ON DIGITAL DISPLAY ASSETS
+AMAZON PRIME/PRIME ORIGINAL LOGO
+SIZING MUST BE THE SAME HEIGHT AS THE FIRST LINE OF THE CTA
+SPACING BETWEEN PRIME ORIGINAL LOGO AND TITLE TREATMENT MUST BE THE EQUIVALENT OF 0.5% OF THE HEIGHT OF A SINGLE LINE OF THE CTA
+MUST BE CENTRED ABOVE THE TITLE TREATMENT
+THE FOLLOWING COUNTRIES USE THE "AMAZON PRIME" LOGO
+Belgium
+Luxembourg
+Netherlands
+Poland
+Sweden
+Turkey
+THE FOLLOWING COUNTRIES USE THE "PRIME" LOGO
+France
+Germany
+Italy
+Portugal
+Spain
+United Kingdom
+Czech Republic
+Denmark
+Finland
+Greece
+Hungary
+IF LOGO IS STACKED (TWO LINES)
+WIDTH MUST BE THE EQUIVALENT OF 60% OF THE CONTAINER
+IF LOGO IS ALL ON ONE LINE
+WIDTH MUST BE THE EQUIVALENT OF 70% OF THE CONTAINER
+
+
+  SPACING/LAYOUT:
+  - CTA
+MUST BE A SAFE ZONE ABOVE AND BELOW CTA WHICH IS THE EQUIVALENT TO DOUBLE THE SIZE OF THE FONT.
+THE SPACING BEFORE THE VERTICAL BAR SHOULD BE A DOUBLE SPACE (USING THE REGULAR FONT) TO SEPERATE THE TWO WORDS
+MUST REMAIN CENTERED WITH THE TT
+TITLE TREATMENT
+THE GAP BETWEEN CTA AND TITLE TREATMENT MUST BE THE EQUIVALENT OF DOUBLE THE FONT SIZE OF THE CTA
+LANDSCAPE IMAGES
+CONTAINER MUST BE 25% OF WIDTH OF THE ADVERT
+LOGO WITHIN CONTAINER MUST BE 60% WIDTH OF THE CONTAINER
+BORDER MUST 2.5% SIZE OF THE AD
+TITLE TREATMENT MUST NOT COME WITHIN 2.5% OF THE BORDER
+PORTRAIT IMAGES
+CONTAINER MUST BE 25% OF WIDTH OF THE ADVERT
+BORDER MUST BE 5% OF THE WIDTH OF THE ADVERT
+TITLE TREATMENT MUST NOT COME WITHIN 5% OF THE BORDER
+LOGO WITHIN CONTAINER MUST BE 50% DEPTH OF CONTAINER
+PRIME ORIGINAL LOGO
+SIZING MUST BE THE SAME HEIGHT AS THE FIRST LINE OF THE CTA
+SPACING BETWEEN PRIME ORIGINAL LOGO AND TITLE TREATMENT MUST BE THE EQUIVALENT OF 0.5% OF THE HEIGHT OF A SINGLE LINE OF THE CTA
+MUST BE CENTRED ABOVE THE TITLE TREATMENT
+BREAKOUTS
+IF AN ELEMENT IS TO BREAK OUT INTO THE BORDER, IT MUST BE REACH A MINIMUM OF 50% OF THE BORDER
+CANNOT REACH MORE THAN 75% OF THE BORDER
+CORNER RADIUS
+RADIUS MUST MATCH THE BORDER WIDTH. FOR EXAMPLE, IF BORDER WIDTH IS 1O.5mm, THEN RADIUS SHOULD MATCH.

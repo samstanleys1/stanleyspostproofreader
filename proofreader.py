@@ -18,8 +18,9 @@ REFERENCES_DIR = SCRIPT_DIR / "references"
 EMEA_PATH = REFERENCES_DIR / "EMEA Messaging Matrix-2[95].xlsx"
 GLOBAL_CTA_PATH = REFERENCES_DIR / "Global_CTA_Matrix_Original Movies  Series_MASTER_ Dropdown_8.1.25-2.xlsx"
 BRAND_GUIDELINES_PATH = REFERENCES_DIR / "brand_guidelines.pdf"
+BRAND_RULES_PATH = REFERENCES_DIR / "brand_rules.txt"
 
-SYSTEM_PROMPT = """You are an expert proofreader and brand compliance reviewer. You will be given an image (product packaging, marketing material, etc.) and possibly a brand guidelines document.
+SYSTEM_PROMPT = """You are an expert proofreader and brand compliance reviewer. You will be given an image (product packaging, marketing material, etc.) and possibly brand guidelines documents and rules.
 
 Your job:
 1. **OCR**: Extract ALL visible text from the image.
@@ -27,7 +28,8 @@ Your job:
 3. **Grammar**: Carefully check for grammar mistakes in all text. Pay close attention to subject-verb agreement (e.g., "battery life last" should be "battery life lasts"), incorrect tense, missing articles, wrong prepositions, and sentence structure errors. Report every grammar issue you find — do not skip any.
 4. **Translation**: If multiple languages are expected, verify translations are accurate and consistent between languages.
 5. **Approved Messaging Compliance**: If reference translation/messaging data is provided, compare ALL text in the image against the approved translations. Flag any text that uses unapproved wording, wrong capitalization style, or deviates from the approved CTAs and messaging.
-6. **Visual/Brand Compliance**: If brand guidelines are provided, compare logo sizes, placement, colors, and typography against the guidelines. Note any deviations.
+6. **Brand Rules Compliance**: If explicit brand rules are provided (colors, fonts, spacing, layout measurements), meticulously check EVERY requirement. Measure proportions, verify colors match exactly (hex codes), check font usage, validate spacing ratios, and confirm all measurements against the specified percentages and dimensions. Flag ANY deviations from the stated rules.
+7. **Visual/Brand Compliance**: If brand guidelines PDF is provided, use it as visual reference to understand correct layouts and compare against the rules.
 
 Return your analysis as a JSON object with this exact structure:
 {
@@ -216,7 +218,7 @@ def encode_file(path: Path) -> tuple[str, str]:
     return base64.standard_b64encode(data).decode("utf-8"), mime_type
 
 
-def build_content_blocks(image_path: Path, guidelines_path: Path | None, languages: str) -> list[dict]:
+def build_content_blocks(image_path: Path, guidelines_path: Path | None, languages: str, asset_type: str = "General") -> list[dict]:
     """Build the content blocks for the Claude API request."""
     blocks = []
 
@@ -230,10 +232,26 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
             "data": img_data,
         },
     })
+
+    asset_info = f"Above is the image to proofread. Expected languages: {languages}."
+    if asset_type and asset_type != "General":
+        asset_info += f"\n\nAsset Type: {asset_type}\nIMPORTANT: Apply the specific compliance rules for this asset type (e.g., color mode requirements, logo placement rules, etc.)."
+
     blocks.append({
         "type": "text",
-        "text": f"Above is the image to proofread. Expected languages: {languages}.",
+        "text": asset_info,
     })
+
+    # Add brand rules text if available
+    if BRAND_RULES_PATH.exists():
+        brand_rules = BRAND_RULES_PATH.read_text(encoding="utf-8")
+        blocks.append({
+            "type": "text",
+            "text": f"=== BRAND COMPLIANCE RULES ===\n"
+                    f"These are the MANDATORY rules that the image must follow. "
+                    f"Check EVERY requirement meticulously and flag ANY deviations.\n\n"
+                    f"{brand_rules}",
+        })
 
     # Add guidelines if provided
     if guidelines_path:
@@ -258,7 +276,7 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
             })
         blocks.append({
             "type": "text",
-            "text": "Above is the brand guidelines document. Compare the product image against these guidelines for compliance.",
+            "text": "Above is the brand guidelines document with visual examples. Use this as a reference to understand what correct layouts should look like, in combination with the explicit rules provided.",
         })
 
     # Add reference data from spreadsheets
@@ -331,6 +349,9 @@ def main():
     parser.add_argument("image", type=Path, help="Path to the JPEG image to proofread")
     parser.add_argument("--guidelines", type=Path, default=None, help="Path to brand guidelines (PDF or image)")
     parser.add_argument("--languages", type=str, default="English", help='Expected languages, comma-separated (default: "English")')
+    parser.add_argument("--asset-type", type=str, default="General",
+                        choices=["General", "LRD", "OOH", "DOOH", "Digital Display", "Companion Banners", "T-Sides"],
+                        help='Type of asset (default: "General")')
     parser.add_argument("--output", type=Path, default=None, help="Save report to a file")
     args = parser.parse_args()
 
@@ -350,7 +371,7 @@ def main():
 
     # Build and send API request
     client = anthropic.Anthropic()
-    content = build_content_blocks(args.image, args.guidelines, args.languages)
+    content = build_content_blocks(args.image, args.guidelines, args.languages, args.asset_type)
 
     print(f"Analyzing {args.image.name}...", file=sys.stderr)
     response = client.messages.create(

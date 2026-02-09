@@ -12,6 +12,7 @@ import streamlit as st
 
 from proofreader import (
     BRAND_GUIDELINES_PATH,
+    BRAND_RULES_PATH,
     LANGUAGE_TO_CTA_SHEET,
     SYSTEM_PROMPT,
     build_content_blocks,
@@ -46,14 +47,35 @@ with st.sidebar:
         default=["English"],
     )
 
+    asset_type = st.selectbox(
+        "Asset Type",
+        options=[
+            "General",
+            "LRD (Living Room Display)",
+            "OOH (Out of Home - Print)",
+            "DOOH (Digital Out of Home)",
+            "Digital Display",
+            "Companion Banners",
+            "T-Sides (Bus Advertising)",
+        ],
+        index=0,
+        help="Select the type of asset to apply specific compliance rules",
+    )
+
     guidelines_file = st.file_uploader(
         "Brand guidelines (optional)",
         type=["pdf", "png", "jpg", "jpeg", "webp"],
     )
 
-    # Show info if default guidelines exist
+    # Show info about auto-loaded brand compliance files
+    brand_files_loaded = []
+    if BRAND_RULES_PATH.exists():
+        brand_files_loaded.append(f"✓ Brand rules: {BRAND_RULES_PATH.name}")
     if BRAND_GUIDELINES_PATH.exists() and guidelines_file is None:
-        st.info(f"✓ Using default brand guidelines: {BRAND_GUIDELINES_PATH.name}")
+        brand_files_loaded.append(f"✓ Visual examples: {BRAND_GUIDELINES_PATH.name}")
+
+    if brand_files_loaded:
+        st.success("\n\n".join(brand_files_loaded))
 
 # --------------- main area ---------------
 uploaded_image = st.file_uploader(
@@ -89,7 +111,7 @@ if uploaded_image is not None:
         languages_str = ", ".join(languages) if languages else "English"
 
         with st.spinner("Analyzing..."):
-            content = build_content_blocks(tmp_img_path, guidelines_path, languages_str)
+            content = build_content_blocks(tmp_img_path, guidelines_path, languages_str, asset_type)
 
             client = anthropic.Anthropic(api_key=api_key)
             response = client.messages.create(

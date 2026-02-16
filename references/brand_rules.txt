@@ -1,15 +1,15 @@
 CONTEXT:
-We are a company that develops advertisements for Amazon Prime. We create an asset, such as a movie poster, and adapt it for many different markets. This includes different countries and therefore different languages. Our assets cover many different forms of media, such as print and digitaL.
+We are a company that develops advertisements for Amazon Prime. We create an asset, such as a movie poster, and adapt it for many different markets. This includes different countries and therefore different languages. Our assets cover many different forms of media, such as print and digital.
 
 DEFINITION OF TERMS:
 Key art - the main image or design.
-Container - the blue box that that comes outside of the key art
-Border - The blue border that comes from the container and surrounds the key art
-Title Treatment - The wording of the series/movie. Often designed and given no particular font
-Logo - The Amazon Prime or Prime wording that goes in the container and alongside CTA
-Prime Original Logo - The Prime Original wording that goes above the title treatment on amazon original series
+Container - the LARGER blue box where the container logo sits. This is the solid blue area, not just a thin line. POSITION: For LANDSCAPE images, the container appears on the RIGHT side. For PORTRAIT images, the container appears at the TOP.
+Border - The THINNER blue border line that comes from the container and surrounds the key art. This is a frame around the key art, much thinner than the container.
+Title Treatment (TT) - The wording of the series/movie. Often designed and given no particular font
+Container Logo - The Amazon Prime or Prime wording that goes in the container
+Signature - The Amazon Prime, Prime, or Prime Original logo that goes above the title treatment (NOT in the container)
 CTA - Call to action. Wording that tells the viewer information such as the date it launches or the product amazon is launching (i.e. new movie, new series, new season)
-PRE CTA - Call to action, but before the product is available. Will always have a date for when the show/series/movie is avaiable to watch. Will also include a description of what the product is (i.e. new movie, new series, new season)
+PRE CTA - Call to action, but before the product is available. Will always have a date for when the show/series/movie is available to watch. Will also include a description of what the product is (i.e. new movie, new series, new season)
 POST CTA - Call to action, but after the product has launched. Will not display a date, but instead a call to view the product (i.e. watch now, available to buy, now available)
 OOH - Out of home, therefore product needs to be suitable for print output. Must be in CMYK
 DOOH - Digital out of home, therefore product needs to be suitable for digital output. Must be in RGB
@@ -20,105 +20,488 @@ Companion Banners - Adaptations of our images, that will often sit besides a vid
 T-Sides - Adaptations of our images that will be placed on the side of a London Bus. Often shaped like a T and therefore requires specific adaptation of elements.
 
 
-  COLORS:
-The following elements must follow either one of the colours listed
-Container
-Logo
-CTA
-PRE CTA
-POST CTA
-  - PRIME BLUE
-HEX: #0578FF
-RGB: 5, 120, 255
-CMYK: 88, 45, 0, 0
-PMS C: 2172
-PMS U: 2184
+COLORS:
+The following elements must follow one of the colours listed below:
+- Container
+- Container Logo
+- CTA
+- Signature
+
+APPROVED COLORS:
+PRIME BLUE
+  HEX: #0578FF
+  RGB: 5, 120, 255
+  CMYK: 88, 45, 0, 0
+  PMS C: 2172
+  PMS U: 2184
+
 DARK SQUID INK
-HEX: #0f141a
-RGB: 15, 20, 26
-CMYK: 95, 70, 0, 85
-PMS C: 4146
-PMS U: 2767
+  HEX: #0f141a
+  RGB: 15, 20, 26
+  CMYK: 95, 70, 0, 85
+  PMS C: 4146
+  PMS U: 2767
+
 WHITE
-HEX: #FFFFFF
-RGB: 255, 255, 255
+  HEX: #FFFFFF
+  RGB: 255, 255, 255
+
 OFF-WHITE
-HEX: #F5F3EF
-RGB: 245, 243, 239
+  HEX: #F5F3EF
+  RGB: 245, 243, 239
+
 BLACK
-HEX: #000000
-RGB: 0, 0, 0
+  HEX: #000000
+  RGB: 0, 0, 0
+
+COLOR CHECKING REQUIREMENTS:
+FOR OOH (OUT OF HOME) ASSETS:
+  - Container MUST use CMYK values: 88, 45, 0, 0 (Prime Blue)
+  - Check all colors using CMYK values, NOT RGB or HEX
+  - Flag any deviation from approved CMYK values
+
+FOR DOOH (DIGITAL OUT OF HOME) ASSETS:
+  - Container MUST use RGB values: 5, 120, 255 (Prime Blue)
+  - Check all colors using RGB values, NOT CMYK or HEX
+  - Flag any deviation from approved RGB values
+
+CTA AND SIGNATURE TEXT COLOR:
+  - CTA text MUST be pure white: RGB 255, 255, 255 (or HEX #FFFFFF)
+  - Signature text MUST be pure white: RGB 255, 255, 255 (or HEX #FFFFFF)
+  - Flag if CTA or Signature uses off-white, cream, or any other shade
+  - This applies to ALL asset types
 
 
+FONTS/TYPOGRAPHY:
+CTA FONT REQUIREMENTS (CRITICAL - ALWAYS CHECK):
+  REQUIRED FONTS:
+    - First half of CTA (before pipe): EMBER MODERN DISPLAY STANDARD BOLD
+    - Second half of CTA (after pipe): EMBER MODERN DISPLAY STANDARD REGULAR
 
-  FONTS/TYPOGRAPHY:
-  - CTA
-PRE CTA TYPICAL EXAMPLE: NEW ORIGINAL SERIES  |  MONTH XX
-POST CTA TYPICAL EXAMPLE: NEW ORIGIANAL SERIES  |  WATCH NOW
-FIRST HALF OF CTA MUST BE USING EMBER MODERN DISPLAY STANDARD BOLD FONT
-SECOND HALF OF CTA MUST BE USING EMBER MODERN DISPLAY STANDARD REGULAR
-IMPORTANT - ORIGINAL IN CTA:
-IF "PRIME ORIGINAL" LOGO IS PLACED ABOVE THE TITLE TREATMENT, THEN "ORIGINAL" MUST NOT APPEAR IN THE CTA
-IF ONLY "PRIME" LOGO IS PLACED ABOVE THE TITLE TREATMENT, THEN "ORIGINAL" MUST APPEAR IN THE CTA
-THIS PREVENTS REDUNDANCY BETWEEN THE LOGO AND CTA TEXT
+  VISUAL CHECKING INSTRUCTIONS:
+    - COMPARE the CTA in the test image to the CTAs shown in the master examples
+    - Look at the font style, weight, and appearance of the CTAs in the master examples
+    - The test image CTA should match the visual appearance of the master example CTAs
+    - The FIRST HALF (before pipe) MUST appear BOLD/HEAVY weight (same as master examples)
+    - The SECOND HALF (after pipe) MUST appear REGULAR/NORMAL weight (same as master examples)
+    - There MUST be a visible weight difference between the two halves (as shown in master examples)
 
-  LOGO REQUIREMENTS:
-  - AMAZON PRIME/PRIMI LOGO MUST BE INCLUDED ON ALL DELIVERABLES. BUT MUST NOT BE ON DIGITAL DISPLAY ASSETS
-AMAZON PRIME/PRIME ORIGINAL LOGO
-SIZING MUST BE THE SAME HEIGHT AS THE FIRST LINE OF THE CTA
-SPACING BETWEEN PRIME ORIGINAL LOGO AND TITLE TREATMENT MUST BE THE EQUIVALENT OF 0.5% OF THE HEIGHT OF A SINGLE LINE OF THE CTA
-MUST BE CENTRED ABOVE THE TITLE TREATMENT
-LOGO AND CTA COORDINATION:
-IF "PRIME ORIGINAL" LOGO IS USED ABOVE TT, THE CTA MUST NOT INCLUDE "ORIGINAL" (TO AVOID REDUNDANCY)
-IF ONLY "PRIME" LOGO IS USED ABOVE TT, THE CTA MUST INCLUDE "ORIGINAL"
-THE FOLLOWING COUNTRIES USE THE "AMAZON PRIME" LOGO
-Belgium
-Luxembourg
-Netherlands
-Poland
-Sweden
-Turkey
-THE FOLLOWING COUNTRIES USE THE "PRIME" LOGO
-France
-Germany
-Italy
-Portugal
-Spain
-United Kingdom
-Czech Republic
-Denmark
-Finland
-Greece
-Hungary
-IF LOGO IS STACKED (TWO LINES)
-WIDTH MUST BE THE EQUIVALENT OF 60% OF THE CONTAINER
-IF LOGO IS ALL ON ONE LINE
-WIDTH MUST BE THE EQUIVALENT OF 70% OF THE CONTAINER
+  WHAT TO FLAG:
+    - FLAG ERROR if the CTA font style looks noticeably different from the master examples
+    - FLAG ERROR if both halves appear the same weight (master examples show clear weight difference)
+    - FLAG ERROR if the first half appears lighter/thinner than the second half
+    - FLAG ERROR if the second half appears bolder/heavier than the first half
+    - FLAG ERROR if the font appears to be a completely different typeface from the master examples
+    - Compare character shapes, proportions, and styling to the master examples
+
+  CHECKING PROCESS:
+    1. Find a CTA in the master examples that matches the asset type being checked
+    2. Compare the visual appearance of the test CTA to the master CTA
+    3. Look for differences in: font weight, character shapes, spacing, proportions
+    4. Flag if the test CTA looks noticeably different from the master reference
+
+  VALID CTA EXAMPLES (showing weight difference):
+    **NEW ORIGINAL SERIES** | 21 JANUARY  ← first half bold, second half regular
+    **NEW SERIES** | 5 MARCH              ← first half bold, second half regular
+    **NEW ORIGINAL SERIES** | WATCH NOW   ← first half bold, second half regular
+
+  INVALID CTA EXAMPLES:
+    NEW ORIGINAL SERIES | 21 JANUARY  ← both same weight (wrong)
+    NEW SERIES | **5 MARCH**          ← second half bolder (wrong)
+
+CTA FORMAT RULES:
+  - The vertical pipe "|" is the approved separator
+  - There MUST be ONE SPACE before the pipe
+  - Examples like "NEW SERIES|21 JANUARY" with no space are INCORRECT
+  - Examples like "NEW SERIES  |21 JANUARY" with double space are INCORRECT
+  - Correct format: "NEW SERIES | 21 JANUARY" (single space before pipe)
+  - Flag if spacing before pipe is missing, insufficient, or excessive
+
+CTA TEXT CASE:
+  - ALL CTA text MUST be in UPPERCASE
+  - Examples: "NEW SERIES | 21 JANUARY" ✓ correct
+  - Examples: "New Series | 21 January" ✗ incorrect (must be all caps)
+  - Examples: "new series | 21 january" ✗ incorrect (must be all caps)
+  - Flag if any CTA text uses lowercase or mixed case
 
 
-  SPACING/LAYOUT:
-  - CTA
-MUST BE A SAFE ZONE ABOVE AND BELOW CTA WHICH IS THE EQUIVALENT TO DOUBLE THE SIZE OF THE FONT.
-THE SPACING BEFORE THE VERTICAL BAR SHOULD BE A DOUBLE SPACE (USING THE REGULAR FONT) TO SEPERATE THE TWO WORDS
-MUST REMAIN CENTERED WITH THE TT
-TITLE TREATMENT
-THE GAP BETWEEN CTA AND TITLE TREATMENT MUST BE THE EQUIVALENT OF DOUBLE THE FONT SIZE OF THE CTA
-LANDSCAPE IMAGES
-CONTAINER MUST BE 25% OF WIDTH OF THE ADVERT
-LOGO WITHIN CONTAINER MUST BE 60% WIDTH OF THE CONTAINER
-BORDER MUST 2.5% SIZE OF THE AD
-TITLE TREATMENT MUST NOT COME WITHIN 2.5% OF THE BORDER
-PORTRAIT IMAGES
-CONTAINER MUST BE 25% OF WIDTH OF THE ADVERT
-BORDER MUST BE 5% OF THE WIDTH OF THE ADVERT
-TITLE TREATMENT MUST NOT COME WITHIN 5% OF THE BORDER
-LOGO WITHIN CONTAINER MUST BE 50% DEPTH OF CONTAINER
-PRIME ORIGINAL LOGO
-SIZING MUST BE THE SAME HEIGHT AS THE FIRST LINE OF THE CTA
-SPACING BETWEEN PRIME ORIGINAL LOGO AND TITLE TREATMENT MUST BE THE EQUIVALENT OF 0.5% OF THE HEIGHT OF A SINGLE LINE OF THE CTA
-MUST BE CENTRED ABOVE THE TITLE TREATMENT
-BREAKOUTS
-IF AN ELEMENT IS TO BREAK OUT INTO THE BORDER, IT MUST BE REACH A MINIMUM OF 50% OF THE BORDER
-CANNOT REACH MORE THAN 75% OF THE BORDER
-CORNER RADIUS
-RADIUS MUST MATCH THE BORDER WIDTH. FOR EXAMPLE, IF BORDER WIDTH IS 1O.5mm, THEN RADIUS SHOULD MATCH.
+DATE FORMATTING:
+UK/EUROPE/INTERNATIONAL MARKETS: MUST USE DAY MONTH FORMAT (e.g., "21 JANUARY", "5 MARCH")
+US MARKETS ONLY: MUST USE MONTH DAY FORMAT (e.g., "JANUARY 21", "MARCH 5")
+ALL DATES IN CTAs MUST BE IN UPPERCASE
+MONTH NAMES MUST BE FULLY SPELLED OUT (NOT ABBREVIATED - e.g., "JANUARY" not "JAN")
+DO NOT FLAG DATES AS INCORRECT IF THEY MATCH THE APPROPRIATE FORMAT FOR THE TARGET MARKET
+
+
+SIGNATURE (LOGO ABOVE TITLE TREATMENT) REQUIREMENTS:
+SIGNATURE PRESENCE:
+  - Signature MUST be present on ALL deliverables
+  - EXCEPTION: Digital Display assets - signature is OPTIONAL
+  - Flag if signature is missing on non-Digital Display assets
+  - The signature can be "Amazon Prime", "Prime", or "Prime Original" depending on content and country
+
+SIGNATURE SIZING (CRITICAL - ALWAYS CHECK):
+  - Height MUST be the same as the CTA text height
+  - Measure and compare: Signature height vs CTA height
+  - They should be visually the same size
+  - FLAG ERROR if Signature appears larger (taller) than the CTA
+  - FLAG ERROR if Signature appears smaller (shorter) than the CTA
+  - Example: If CTA text is 50 pixels tall, Signature text should also be 50 pixels tall
+  - IMPORTANT: Always check this on every image - this is a common mistake
+
+SIGNATURE SPACING:
+  - Gap between signature and Title Treatment MUST be 0.5x the height of the CTA
+  - This is NOT 0.5% - it is 0.5 times (half of) the CTA line height
+  - Measure this spacing and flag any deviations
+
+SIGNATURE POSITIONING:
+  - MUST be centered horizontally above the Title Treatment
+  - DO NOT FLAG centering unless the element is CLEARLY and OBVIOUSLY off to one side
+  - If an element looks centered to your eyes, DO NOT FLAG IT
+  - Only flag if it's clearly left-aligned or right-aligned (touching or very close to one edge)
+  - Minor deviations from perfect center (within ~10% of image width) should NOT be flagged
+  - IMPORTANT: Signature CANNOT break out into the border area
+  - Signature must stay within the key art area only
+  - If any part of signature extends into the border, this is an error - flag it
+
+SIGNATURE COLOR:
+  - Must be pure white RGB 255, 255, 255 (or HEX #FFFFFF)
+  - Flag if using off-white or any other shade
+
+COUNTRY-SPECIFIC SIGNATURE RULES:
+COUNTRIES USING "AMAZON PRIME" SIGNATURE:
+  - Belgium, Luxembourg, Netherlands, Poland, Sweden, Turkey
+
+COUNTRIES USING "PRIME" SIGNATURE:
+  - France, Germany, Italy, Portugal, Spain, United Kingdom, Czech Republic, Denmark, Finland, Greece, Hungary
+
+PRIME ORIGINAL CONTENT:
+  - If content is Prime Original, use "Prime Original" signature above title treatment
+  - CTA must NOT include "ORIGINAL" (to avoid redundancy)
+  - If signature is only "Prime" (not "Prime Original"), then CTA MUST include "ORIGINAL"
+
+
+CONTAINER LOGO (LOGO INSIDE THE CONTAINER) REQUIREMENTS:
+CONTAINER LOGO PRESENCE:
+  - Container Logo MUST be visible and present in the container
+  - Must be in the correct blue color (Prime Blue)
+  - Flag if container logo is missing or not visible
+  - FOR DIGITAL DISPLAY ASSETS: Container Logo MUST appear inside the container only, NOT outside
+
+CONTAINER LOGO SIZING (CRITICAL - ALWAYS CHECK - COMMON MISTAKE):
+  YOU MUST ALWAYS CHECK THIS - THIS IS FREQUENTLY WRONG AND MUST BE CAUGHT
+
+  MEASUREMENT PROCESS:
+    1. Locate the container (the large blue box)
+    2. Locate the container logo (text/logo inside the blue container)
+    3. Measure both and calculate the ratio
+    4. Compare to the required percentage
+    5. FLAG if it doesn't match
+
+  LANDSCAPE IMAGES:
+    IF STACKED (TWO LINES - "Amazon" on one line, "Prime" on another):
+      - Container logo width MUST be 60% of the container width
+      - HOW TO CHECK: Measure logo width, measure container width, divide logo by container
+      - Example: If container is 100 pixels wide, logo should be 60 pixels wide
+      - FLAG ERROR if logo is significantly smaller than 60% (e.g., 40%, 50%)
+      - FLAG ERROR if logo is significantly larger than 60% (e.g., 75%, 80%)
+      - COMMON MISTAKE: Logo is often too small (30-40%) - always check this
+
+    IF SINGLE LINE (e.g., "Prime" or "Amazon Prime" on one line):
+      - Container logo width MUST be 70% of the container width
+      - HOW TO CHECK: Measure logo width, measure container width, divide logo by container
+      - Example: If container is 100 pixels wide, logo should be 70 pixels wide
+      - FLAG ERROR if logo is significantly smaller than 70% (e.g., 50%, 60%)
+      - FLAG ERROR if logo is significantly larger than 70% (e.g., 85%, 90%)
+      - COMMON MISTAKE: Logo is often too small (40-50%) - always check this
+
+  PORTRAIT IMAGES:
+    - Container logo height MUST be 50% of the container height
+    - This applies to ALL logos (stacked or single line) in portrait orientation
+    - HOW TO CHECK: Measure logo height, measure container height, divide logo by container
+    - Example: If container is 200 pixels tall, logo should be 100 pixels tall
+    - FLAG ERROR if logo is significantly smaller than 50% (e.g., 30%, 40%)
+    - FLAG ERROR if logo is significantly larger than 50% (e.g., 65%, 75%)
+    - COMMON MISTAKE: Logo is often too small (25-40%) in portrait - ALWAYS CHECK THIS
+    - IMPORTANT: Portrait sizing errors are frequently missed - check carefully every time
+
+CONTAINER LOGO POSITIONING (CRITICAL - ALWAYS CHECK - COMMON MISTAKE):
+  YOU MUST ALWAYS CHECK THIS - LOGOS ARE FREQUENTLY OFF-CENTER
+
+  HOW TO CHECK CENTERING:
+    1. Identify the container boundaries (the blue box edges)
+    2. Identify the container logo boundaries (the text/logo edges)
+    3. Check horizontal centering: Is there equal space on left and right sides of the logo?
+    4. Check vertical centering: Is there equal space on top and bottom of the logo?
+    5. If spacing is noticeably unequal, FLAG IT
+
+  LANDSCAPE IMAGES:
+    - Logo MUST be centered horizontally AND vertically within the container
+    - Check LEFT vs RIGHT spacing: Should be approximately equal
+    - Check TOP vs BOTTOM spacing: Should be approximately equal
+    - FLAG ERROR if logo is pushed to the left side (more space on right)
+    - FLAG ERROR if logo is pushed to the right side (more space on left)
+    - FLAG ERROR if logo is pushed to the top (more space on bottom)
+    - FLAG ERROR if logo is pushed to the bottom (more space on top)
+    - COMMON MISTAKE: Logo is often shifted left, right, up, or down - check carefully
+
+  PORTRAIT IMAGES:
+    - Logo MUST be centered horizontally AND vertically within the container
+    - Check LEFT vs RIGHT spacing: Should be approximately equal
+    - Check TOP vs BOTTOM spacing: Should be approximately equal
+    - FLAG ERROR if logo is pushed to the left side (more space on right)
+    - FLAG ERROR if logo is pushed to the right side (more space on left)
+    - FLAG ERROR if logo is pushed to the top (more space on bottom)
+    - FLAG ERROR if logo is pushed to the bottom (more space on top)
+    - COMMON MISTAKE: Logo positioning is frequently wrong in portrait - ALWAYS CHECK
+    - IMPORTANT: Portrait logo positioning errors are often missed - check very carefully
+
+  CENTERING TOLERANCE:
+    - Container logo should be precisely centered
+    - Flag if spacing difference is noticeable (more than ~5% difference in spacing)
+    - This is stricter than CTA/Signature centering - container logo must be accurate
+    - When comparing master examples, check if test logo is in same position as master logo
+
+
+CTA (CALL TO ACTION) REQUIREMENTS:
+CTA PRESENCE:
+  - CTA MUST be present on all assets with a Title Treatment and Signature
+  - Flag if CTA is missing
+
+CTA SIZING (CRITICAL - ALWAYS CHECK):
+  - CTA font size MUST match the signature size above the title treatment
+  - Both CTA and Signature should have the same height
+  - Measure and compare the height of the CTA text to the height of the Signature text
+  - They should be visually the same size
+  - FLAG ERROR if CTA appears larger (taller) than the Signature
+  - FLAG ERROR if CTA appears smaller (shorter) than the Signature
+  - Compare them carefully - look at the text height, not the overall spacing
+  - Example: If Signature text is 50 pixels tall, CTA text should also be 50 pixels tall
+  - IMPORTANT: Always check this on every image - this is a common mistake
+
+CTA POSITIONING:
+  - CTA MUST be centered horizontally underneath the Title Treatment
+  - This applies to ALL assets, especially portrait assets
+  - DO NOT FLAG centering unless the CTA is CLEARLY and OBVIOUSLY off to one side
+  - If the CTA looks centered to your eyes, DO NOT FLAG IT
+  - Only flag if it's clearly left-aligned or right-aligned (touching or very close to one edge)
+  - Minor deviations from perfect center (within ~10% of image width) should NOT be flagged
+
+CTA SPACING FROM TITLE TREATMENT:
+  - Gap between CTA and Title Treatment MUST be 2x the CTA font size
+  - This is double the height of one line of CTA text
+  - Flag if spacing is too small (less than 2x) or too large
+
+CTA SAFE AREA:
+  - There MUST be a safe zone above and below the CTA equal to 2x the CTA font size
+  - CTA MUST NOT touch the border
+  - CTA MUST NOT encroach into the border area
+  - Flag if CTA is too close to or touching the border
+
+CTA FONT AND FORMAT:
+  - First half (before pipe): MUST appear BOLD/HEAVY weight
+  - Second half (after pipe): MUST appear REGULAR/NORMAL weight (lighter)
+  - There must be a visible weight difference between the two halves
+  - Pipe separator must have proper spacing (single space before pipe)
+  - FLAG if both halves appear the same weight (no weight difference)
+  - FLAG if weight difference is reversed (first half lighter, second half heavier)
+  - FLAG if spacing before pipe is incorrect
+
+CTA COLOR:
+  - CTA text MUST be pure white RGB 255, 255, 255
+  - Flag if using off-white or any other color
+
+PRE/POST CTA RULES (CRITICAL - ALWAYS CHECK):
+  PRE-RELEASE ASSETS (CTA Type: PRE):
+    - CTA MUST include a specific date (e.g., "21 JANUARY", "5 MARCH", "JANUARY 21")
+    - CTA MUST NOT include action words like: "Watch Now", "Now Streaming", "Available Now", "Stream Now"
+    - Valid PRE CTA examples:
+      * "NEW ORIGINAL SERIES | 21 JANUARY" ✓
+      * "NEW SERIES | 5 MARCH" ✓
+      * "NEW MOVIE | JANUARY 21" ✓ (US format)
+    - Invalid PRE CTA examples:
+      * "NEW SERIES | WATCH NOW" ✗ (has action copy, no date)
+      * "NEW MOVIE | NOW STREAMING" ✗ (has action copy, no date)
+      * "NEW ORIGINAL SERIES | AVAILABLE NOW" ✗ (has action copy, no date)
+    - FLAG ERROR: If asset is marked PRE but CTA has action copy instead of date
+    - FLAG ERROR: If asset is marked PRE but CTA is missing a date
+
+  POST-RELEASE ASSETS (CTA Type: POST):
+    - CTA MUST include action copy (e.g., "WATCH NOW", "NOW STREAMING", "AVAILABLE NOW")
+    - CTA MUST NOT include a date
+    - Valid POST CTA examples:
+      * "NEW ORIGINAL SERIES | WATCH NOW" ✓
+      * "NEW SERIES | NOW STREAMING" ✓
+      * "NEW MOVIE | AVAILABLE NOW" ✓
+    - Invalid POST CTA examples:
+      * "NEW SERIES | 21 JANUARY" ✗ (has date, no action copy)
+      * "NEW MOVIE | 5 MARCH" ✗ (has date, no action copy)
+    - FLAG ERROR: If asset is marked POST but CTA has a date instead of action copy
+    - FLAG ERROR: If asset is marked POST but CTA is missing action copy
+
+
+TITLE TREATMENT (TT) REQUIREMENTS:
+TITLE TREATMENT PRESENCE:
+  - Title Treatment MUST be present if there is a CTA and Signature
+  - Flag if Title Treatment is missing when CTA and Signature are present
+
+TITLE TREATMENT SPACING FROM BORDER:
+  LANDSCAPE IMAGES:
+    - TT MUST NOT come within 2.5% of the border
+    - Measure the gap and flag if TT is too close to border
+
+  PORTRAIT IMAGES:
+    - TT MUST NOT come within 5% of the border
+    - Measure the gap and flag if TT is too close to border
+
+TITLE TREATMENT SAFE AREA:
+  - TT must respect safe zones and not touch or encroach on the border
+  - TT must be at least the border's width/height away from the border
+  - Flag if TT is touching or too close to border
+  - IMPORTANT: Title Treatment CANNOT break out into the border area
+  - TT must stay within the key art area only
+  - If any part of TT extends into the border, this is an error - flag it
+
+
+CONTAINER AND BORDER REQUIREMENTS:
+CONTAINER PRESENCE:
+  - Container MUST be present and visible
+  - Container MUST be in the correct blue color (Prime Blue CMYK 88,45,0,0 for OOH or RGB 5,120,255 for DOOH)
+  - Flag if container is missing or wrong color
+
+CONTAINER POSITIONING (CRITICAL):
+  LANDSCAPE IMAGES:
+    - Container MUST be positioned on the RIGHT side of the image
+    - DO NOT flag if container is on the right side
+    - FLAG ERROR if container is at the top (wrong for landscape)
+    - FLAG ERROR if container is on the left side (wrong)
+
+  PORTRAIT IMAGES:
+    - Container MUST be positioned at the TOP of the image
+    - DO NOT flag if container is at the top
+    - FLAG ERROR if container is on the right side (wrong for portrait)
+    - FLAG ERROR if container is on the left side (wrong)
+
+CONTAINER SIZING:
+  LANDSCAPE IMAGES:
+    - Container MUST be 25% of the total width of the advert
+
+  PORTRAIT IMAGES:
+    - Container MUST be 25% of the total width of the advert
+    - NOTE: For portrait, this refers to the WIDTH (not height) of the container
+
+BORDER SIZING:
+  LANDSCAPE IMAGES:
+    - Border MUST be 2.5% of the ad size
+
+  PORTRAIT IMAGES:
+    - Border MUST be 5% of the width of the advert
+
+BORDER CONTINUITY:
+  - Border MUST be continuous with no breaks or interruptions
+  - Border MUST NOT have any encroachment or deviation from key art elements
+  - Border MUST be one continuous straight line around the key art
+  - Flag if any element from the key art breaks through or touches the border (except approved breakouts)
+
+CORNER RADIUS:
+  - Corner radius MUST match the border width
+  - Example: If border width is 10.5mm, corner radius should be 10.5mm
+  - Measure and verify this matches exactly
+
+
+BREAKOUT REQUIREMENTS:
+BREAKOUT SIZE LIMITS:
+  - Minimum: Breakout MUST reach at least 50% into the border
+  - Maximum: Breakout CANNOT reach more than 75% into the border
+  - Flag if breakout is less than 50% or more than 75%
+
+BREAKOUT CLEARANCE (CRITICAL - CHECK CAREFULLY):
+  - Breakouts MUST NOT touch, overlap, or come close to the CONTAINER LOGO
+  - The container logo is the Prime/Amazon Prime logo INSIDE the blue container at the top
+  - Check visually: Is any part of the breakout (head, arm, object, etc.) touching or very close to the container logo?
+  - If YES, this is a CRITICAL ERROR - flag immediately
+  - "Too close" means within a few pixels or visually appearing to touch
+  - Breakouts MUST also maintain clearance from:
+    * Title Treatment (TT)
+    * CTA (call to action)
+    * Signature (logo above title treatment)
+  - Flag if breakout is touching, overlapping, or too close to ANY of these elements
+  - IMPORTANT: Carefully examine the container area - breakouts frequently encroach here
+  - Look at where the breakout extends into the border/container area
+  - Measure the distance between the breakout edge and the container logo
+  - If the breakout appears to touch or be very close to the logo, FLAG IT
+
+
+MEASUREMENT AND VERIFICATION INSTRUCTIONS:
+MEASUREMENTS:
+  - Actively measure and calculate all proportions by comparing element dimensions to overall image dimensions
+  - For percentage rules (e.g., "container must be 25%"), calculate actual percentage and report findings
+  - Example: "Container is 24.8% of total width - does not meet exact 25% requirement"
+  - Example: "Container is 25% of total width - complies with requirement"
+  - DO NOT ask for verification - make a determination based on measurements
+  - Flag ANY deviations from specified exact values
+
+CENTERING AND ALIGNMENT (IMPORTANT - AVOID FALSE POSITIVES):
+  - DO NOT FLAG centering issues unless an element is CLEARLY and OBVIOUSLY misaligned
+  - If an element looks centered to your eyes, DO NOT FLAG IT
+  - Only flag centering if the element is clearly pushed to one side (left-aligned or right-aligned)
+  - Acceptable centering tolerance: Elements can be up to ~10% away from perfect center and still be considered "centered"
+  - Use professional judgement - if a designer would consider it centered, don't flag it
+  - When in doubt, DO NOT FLAG centering issues
+  - Better to miss a minor centering issue than to flag a false positive
+
+COLORS:
+  - For OOH assets: Check CMYK values match exactly
+  - For DOOH assets: Check RGB values match exactly
+  - Report actual color values found vs required values
+  - Flag if colors do not match exactly
+
+SPELLING AND TYPOS:
+  - Check EVERY word for spelling errors
+  - Do NOT auto-correct or assume correct spelling
+  - Example: "SRIES" is NOT the same as "SERIES" - flag this as an error
+  - Carefully verify each letter in all text, especially in CTAs and titles
+
+ELEMENT IDENTIFICATION:
+  - DO NOT confuse the Signature (above TT) with the CTA (below TT)
+  - DO NOT confuse the Container Logo (in container) with the Signature (above TT)
+  - Clearly identify each element before checking compliance
+  - If unsure, describe the location and text of the element being flagged
+
+
+CRITICAL CHECKING REQUIREMENTS:
+YOU MUST CHECK AND FLAG THE FOLLOWING:
+1. Missing elements (container, border, container logo, signature, TT, CTA)
+2. Container position (CRITICAL: Landscape = RIGHT side, Portrait = TOP)
+3. Wrong colors (CMYK for OOH, RGB for DOOH)
+4. Wrong text colors (CTA and signature must be pure white)
+5. Spelling errors and typos (do not auto-correct)
+6. Wrong font weights in CTA (first half must be BOLD, second half must be REGULAR - must have visible weight difference)
+7. CTA and Signature size mismatch (CRITICAL: CTA must be same height as Signature - check EVERY time, common mistake)
+8. Container logo sizing (CRITICAL - COMMON MISTAKE: Landscape stacked=60%, single=70%. Portrait=50% of height. Logo is often TOO SMALL - check EVERY image)
+9. Container logo positioning (check BOTH landscape and portrait carefully)
+10. Other incorrect measurements (container %, border %)
+11. Obvious centering issues (signature, CTA - ONLY flag if CLEARLY pushed to one side, DO NOT flag if it looks centered)
+12. Spacing violations (signature-TT, CTA-TT, safe areas)
+13. Breakout issues (too small <50%, too large >75%, touching/too close to container logo, touching any text)
+14. Border continuity issues (breaks, encroachment from key art)
+15. PRE/POST CTA mismatches (CRITICAL: PRE must have date, POST must have action copy - check EVERY time)
+16. Date format errors (Day Month vs Month Day)
+17. Missing spacing before pipe in CTA
+18. Elements touching borders or encroaching safe areas
+
+BE CONFIDENT IN YOUR ASSESSMENTS:
+- Make determinations, do not ask for verification
+- Report what you measure and see
+- Flag deviations clearly and specifically
+- Do not second-guess your findings
+
+CRITICAL - ONLY REPORT ISSUES:
+- ONLY include items in the "issues" array if something is WRONG or needs to be fixed
+- DO NOT flag things that are CORRECT or compliant
+- DO NOT mention measurements that meet requirements unless there's a problem
+- DO NOT flag translations that are correct
+- The report should ONLY contain problems that need resolution
+- If everything is correct for a particular requirement, say NOTHING about it
+- Example: If container is exactly 25% - DO NOT mention it. If container is 30% - FLAG IT.
+- Keep the report clean and focused on actual issues only

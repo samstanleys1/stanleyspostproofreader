@@ -8,19 +8,27 @@ import base64
 import json
 import mimetypes
 import sys
+import time
 from pathlib import Path
 
 import anthropic
 import openpyxl
 from PIL import Image
 import io
+from dotenv import load_dotenv
 
 SCRIPT_DIR = Path(__file__).resolve().parent
+
+# Load environment variables from .env file
+load_dotenv(SCRIPT_DIR / ".env")
+
 REFERENCES_DIR = SCRIPT_DIR / "references"
 EMEA_PATH = REFERENCES_DIR / "EMEA Messaging Matrix-2[95].xlsx"
 GLOBAL_CTA_PATH = REFERENCES_DIR / "Global_CTA_Matrix_Original Movies  Series_MASTER_ Dropdown_8.1.25-2.xlsx"
 BRAND_GUIDELINES_PATH = REFERENCES_DIR / "brand_guidelines.pdf"
 BRAND_RULES_PATH = REFERENCES_DIR / "brand_rules.txt"
+COMMON_MISTAKES_PATH = REFERENCES_DIR / "common_mistakes_examples.pdf"
+MASTER_EXAMPLES_PATH = REFERENCES_DIR / "master_examples.pdf"
 
 SYSTEM_PROMPT = """You are an expert proofreader and brand compliance reviewer. You will be given an image (product packaging, marketing material, etc.) and possibly brand guidelines documents and rules.
 
@@ -30,13 +38,27 @@ Your job:
 3. **Grammar**: Carefully check for grammar mistakes in all text. Pay close attention to subject-verb agreement (e.g., "battery life last" should be "battery life lasts"), incorrect tense, missing articles, wrong prepositions, and sentence structure errors. Report every grammar issue you find — do not skip any.
 4. **Translation**: If multiple languages are expected, verify translations are accurate and consistent between languages.
 5. **Approved Messaging Compliance**: If reference translation/messaging data is provided, compare ALL text in the image against the approved translations. Flag any text that uses unapproved wording, wrong capitalization style, or deviates from the approved CTAs and messaging.
-6. **Brand Rules Compliance**: If explicit brand rules are provided (colors, fonts, spacing, layout measurements), meticulously check EVERY requirement. Measure proportions, verify colors match exactly (hex codes), check font usage, validate spacing ratios, and confirm all measurements against the specified percentages and dimensions. Flag ANY deviations from the stated rules.
-7. **Visual/Brand Compliance**: If brand guidelines PDF is provided, use it as visual reference to understand correct layouts and compare against the rules.
+6. **Brand Rules Compliance**: If explicit brand rules are provided (colors, fonts, spacing, layout measurements), meticulously check EVERY requirement.
+   - **MEASUREMENTS**: Actively measure and calculate proportions by comparing element dimensions to the overall image dimensions. For example, if the rule states "container must be 25% of width", measure the container width and total width, calculate the percentage, and determine if it meets the requirement. Report your measurements (e.g., "Container is 24.8% of total width - does not meet exact 25% requirement" or "Container is 25% of total width - complies with requirement"). DO NOT ask for verification - make a determination based on your measurements.
+   - **CONTAINER LOGO SIZING (CRITICAL)**: ALWAYS check if the container logo (text/logo inside the blue container) is the correct size. This is a COMMON MISTAKE. Measure the logo size vs container size and compare to the required percentages. For landscape: stacked logos should be 60% of container width, single-line logos should be 70%. For portrait: logos should be 50% of container height. Container logos are frequently too small - check this carefully every time.
+   - **CONTAINER LOGO POSITIONING (CRITICAL)**: ALWAYS check if the container logo is centered within the container. This is a COMMON MISTAKE. Check if there is equal space on the left/right and top/bottom of the logo. Container logos are frequently off-center (pushed left, right, up, or down) - check both horizontal and vertical centering carefully every time, especially in portrait images.
+   - **COLORS**: Verify colors match exactly (hex codes if visible in the image).
+   - **FONTS**: If master examples are provided, COMPARE the fonts in the test image to the fonts shown in the master examples. Look at character shapes, weights, proportions, and styling. Flag if the test image uses noticeably different fonts from the master examples. For CTAs specifically, check that the first half (before pipe) is bold and the second half (after pipe) is regular weight, matching the master examples.
+   - **SPACING**: Validate spacing ratios and measurements.
+   - **BREAKOUTS**: Carefully examine any elements breaking out from the key art into the border/container. Check if they touch or come too close to the container logo (logo inside the blue container at the top). Measure the distance visually and flag if the breakout appears to touch or encroach on the logo.
+   - Be confident in your measurements and flag ANY deviations from the specified exact values in the brand rules.
+7. **Visual/Brand Compliance**: If master examples are provided, use them as visual references to compare fonts, layouts, styling, and overall appearance. If brand guidelines PDF is provided, use it to understand correct layouts and compare against the rules.
 
 Return your analysis as a JSON object with this exact structure:
 {
   "extracted_text": "All text found in the image, preserving layout as much as possible",
   "languages_detected": ["English", "Spanish"],
+  "element_identification": {
+    "title_treatment": "The exact text you identified as the Title Treatment (movie/series name)",
+    "signature": "The exact text you identified as the Signature (logo above title treatment)",
+    "cta": "The exact text you identified as the CTA (call to action below title treatment)",
+    "container_logo": "The exact text you identified as the Container Logo (logo inside blue container)"
+  },
   "issues": [
     {
       "category": "spelling" | "grammar" | "translation" | "messaging_compliance" | "brand_compliance" | "visual",
@@ -201,8 +223,21 @@ def load_reference_data(languages: list[str]) -> str:
     return header + "\n\n".join(parts)
 
 
-def compress_image(path: Path, max_dimension: int = 5000, quality: int = 95) -> bytes:
-    """Compress an image to reduce file size while maintaining quality for analysis."""
+def compress_image(path: Path, max_dimension: int = 5000, max_size_mb: float = 4.0) -> bytes:
+    """Compress an image to reduce file size while maintaining quality for analysis.
+
+    Args:
+        path: Path to the image file
+        max_dimension: Maximum width or height in pixels
+        max_size_mb: Maximum file size in MB (default 4.5MB to stay under 5MB API limit)
+    """
+    # Check original file size
+    original_size_mb = path.stat().st_size / (1024 * 1024)
+
+    # If file is already small (< 2MB), return original without compression
+    if original_size_mb < 2.0:
+        return path.read_bytes()
+
     img = Image.open(path)
 
     # Convert RGBA to RGB if necessary
@@ -213,16 +248,50 @@ def compress_image(path: Path, max_dimension: int = 5000, quality: int = 95) -> 
     elif img.mode != 'RGB':
         img = img.convert('RGB')
 
-    # Resize if image is too large
+    # For very large files, start with more aggressive resizing
     width, height = img.size
-    if max(width, height) > max_dimension:
-        ratio = max_dimension / max(width, height)
+    current_max_dimension = max_dimension
+
+    # Adjust initial resize based on original file size
+    if original_size_mb > 20:
+        current_max_dimension = 2500  # Very aggressive for huge files
+    elif original_size_mb > 15:
+        current_max_dimension = 3000  # Aggressive for very large files
+    elif original_size_mb > 10:
+        current_max_dimension = 3500  # More aggressive for large files
+
+    # Resize if image is too large
+    if max(width, height) > current_max_dimension:
+        ratio = current_max_dimension / max(width, height)
         new_size = (int(width * ratio), int(height * ratio))
         img = img.resize(new_size, Image.Resampling.LANCZOS)
 
-    # Compress to JPEG
+    # Start with high quality and reduce if needed to stay under size limit
+    quality = 98
     buffer = io.BytesIO()
     img.save(buffer, format='JPEG', quality=quality, optimize=True)
+    compressed_size_mb = len(buffer.getvalue()) / (1024 * 1024)
+
+    # If still too large, reduce quality iteratively (go as low as 60%)
+    while compressed_size_mb > max_size_mb and quality > 60:
+        quality -= 5
+        buffer = io.BytesIO()
+        img.save(buffer, format='JPEG', quality=quality, optimize=True)
+        compressed_size_mb = len(buffer.getvalue()) / (1024 * 1024)
+
+    # If STILL too large after quality reduction, resize further
+    if compressed_size_mb > max_size_mb:
+        current_width, current_height = img.size
+        while compressed_size_mb > max_size_mb and max(current_width, current_height) > 800:
+            # Reduce dimensions by 25% each iteration (more aggressive)
+            current_width = int(current_width * 0.75)
+            current_height = int(current_height * 0.75)
+            img = img.resize((current_width, current_height), Image.Resampling.LANCZOS)
+
+            buffer = io.BytesIO()
+            img.save(buffer, format='JPEG', quality=quality, optimize=True)
+            compressed_size_mb = len(buffer.getvalue()) / (1024 * 1024)
+
     return buffer.getvalue()
 
 
@@ -251,9 +320,14 @@ def encode_file(path: Path) -> tuple[str, str]:
     return base64.standard_b64encode(data).decode("utf-8"), mime_type
 
 
-def build_content_blocks(image_path: Path, guidelines_path: Path | None, languages: str, asset_type: str = "General", is_prime_original: bool = False) -> list[dict]:
+def build_content_blocks(image_path: Path, guidelines_path: Path | None, languages: str, asset_type: str = "General", is_prime_original: bool = False, pre_or_post: str = "Pre") -> list[dict]:
     """Build the content blocks for the Claude API request."""
     blocks = []
+
+    # Detect orientation from image dimensions
+    img = Image.open(image_path)
+    width, height = img.size
+    orientation = "Landscape" if width > height else "Portrait"
 
     # Add the main image
     img_data, img_mime = encode_file(image_path)
@@ -266,7 +340,32 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
         },
     })
 
+    # Determine color mode based on asset type
+    color_mode = "CMYK" if asset_type in ["OOH", "T-Sides"] else "RGB"
+
     asset_info = f"Above is the image to proofread. Expected languages: {languages}."
+
+    # Add orientation instruction
+    asset_info += f"\n\nORIENTATION: {orientation}"
+    if orientation == "Landscape":
+        asset_info += "\nIMPORTANT: This is a LANDSCAPE image (wider than tall). Apply landscape-specific rules: Container at top, Border 2.5%, TT within 2.5% of border."
+    else:
+        asset_info += "\nIMPORTANT: This is a PORTRAIT image (taller than wide). Apply portrait-specific rules: Container at side, Border 5%, TT within 5% of border."
+
+    # Add color mode instruction
+    asset_info += f"\n\nCOLOR MODE: {color_mode}"
+    if color_mode == "CMYK":
+        asset_info += "\nIMPORTANT: This is an OOH or T-Sides asset. Check ALL colors using CMYK values (NOT RGB). Container must be CMYK 88, 45, 0, 0 for Prime Blue."
+    else:
+        asset_info += "\nIMPORTANT: This is a digital asset. Check ALL colors using RGB values (NOT CMYK). Container must be RGB 5, 120, 255 for Prime Blue."
+
+    # Add Pre/Post CTA instruction
+    asset_info += f"\n\nCTA TYPE: {pre_or_post.upper()}"
+    if pre_or_post.lower() == "pre":
+        asset_info += "\nIMPORTANT: This is a PRE-RELEASE asset. CTA MUST include a date (e.g., '21 JANUARY'). CTA MUST NOT have 'Watch Now' or similar action copy. Flag if CTA is missing a date."
+    else:
+        asset_info += "\nIMPORTANT: This is a POST-RELEASE asset. CTA MUST include action copy (e.g., 'WATCH NOW', 'NOW STREAMING'). CTA MUST NOT have a date. Flag if CTA includes a date."
+
     if asset_type and asset_type != "General":
         asset_info += f"\n\nAsset Type: {asset_type}\nIMPORTANT: Apply the specific compliance rules for this asset type (e.g., color mode requirements, logo placement rules, etc.)."
 
@@ -289,6 +388,7 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
                     f"These are the MANDATORY rules that the image must follow. "
                     f"Check EVERY requirement meticulously and flag ANY deviations.\n\n"
                     f"{brand_rules}",
+            "cache_control": {"type": "ephemeral"},
         })
 
     # Add guidelines if provided
@@ -302,6 +402,7 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
                     "media_type": guide_mime,
                     "data": guide_data,
                 },
+                "cache_control": {"type": "ephemeral"},
             })
         else:
             blocks.append({
@@ -311,10 +412,56 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
                     "media_type": guide_mime,
                     "data": guide_data,
                 },
+                "cache_control": {"type": "ephemeral"},
             })
         blocks.append({
             "type": "text",
             "text": "Above is the brand guidelines document with visual examples. Use this as a reference to understand what correct layouts should look like, in combination with the explicit rules provided.",
+        })
+
+    # Add common mistakes examples if available
+    if COMMON_MISTAKES_PATH.exists():
+        mistakes_data, mistakes_mime = encode_file(COMMON_MISTAKES_PATH)
+        blocks.append({
+            "type": "document",
+            "source": {
+                "type": "base64",
+                "media_type": mistakes_mime,
+                "data": mistakes_data,
+            },
+            "cache_control": {"type": "ephemeral"},
+        })
+        blocks.append({
+            "type": "text",
+            "text": "=== COMMON MISTAKES EXAMPLES ===\n"
+                    "Above are visual examples of common mistakes that must be detected and flagged. "
+                    "Study these examples carefully to understand what kinds of errors to look for. "
+                    "Each example shows a specific mistake that was NOT caught by previous checks. "
+                    "Use these examples as training data to improve your detection accuracy.",
+        })
+
+    # Add master examples if available
+    if MASTER_EXAMPLES_PATH.exists():
+        master_data, master_mime = encode_file(MASTER_EXAMPLES_PATH)
+        blocks.append({
+            "type": "document",
+            "source": {
+                "type": "base64",
+                "media_type": master_mime,
+                "data": master_data,
+            },
+            "cache_control": {"type": "ephemeral"},
+        })
+        blocks.append({
+            "type": "text",
+            "text": f"=== MASTER EXAMPLES (PERFECT REFERENCES) ===\n"
+                    f"Above are PERFECT, APPROVED examples for each asset type (OOH, DOOH, T-Sides, etc.). "
+                    f"The top left of each page indicates the asset type.\n\n"
+                    f"IMPORTANT: The image you are checking is a '{asset_type}' asset.\n"
+                    f"Find the corresponding master example for '{asset_type}' in the document above.\n"
+                    f"Compare the image being proofread against that specific master example.\n"
+                    f"Check that measurements, positioning, colors, and layout match the master.\n"
+                    f"Use the master as your reference for what 'correct' looks like for this asset type.",
         })
 
     # Add reference data from spreadsheets
@@ -324,6 +471,7 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
         blocks.append({
             "type": "text",
             "text": ref_data,
+            # Note: Not cached due to 4-block limit. This data varies by language anyway.
         })
 
     blocks.append({
@@ -350,6 +498,19 @@ def format_report(data: dict) -> str:
     if langs:
         lines.append(f"\n--- Languages Detected ---")
         lines.append(", ".join(langs))
+
+    # Element Identification
+    element_id = data.get("element_identification", {})
+    if element_id:
+        lines.append(f"\n--- Element Identification ---")
+        if element_id.get("title_treatment"):
+            lines.append(f"Title Treatment (TT): {element_id['title_treatment']}")
+        if element_id.get("signature"):
+            lines.append(f"Signature:            {element_id['signature']}")
+        if element_id.get("cta"):
+            lines.append(f"CTA:                  {element_id['cta']}")
+        if element_id.get("container_logo"):
+            lines.append(f"Container Logo:       {element_id['container_logo']}")
 
     # Issues
     issues = data.get("issues", [])
@@ -392,6 +553,9 @@ def main():
                         help='Type of asset (default: "General")')
     parser.add_argument("--prime-original", action="store_true",
                         help="Flag if this is Prime Original content (affects logo and CTA requirements)")
+    parser.add_argument("--pre-or-post", type=str, default="Pre",
+                        choices=["Pre", "Post"],
+                        help='CTA type: "Pre" (before release, must have date) or "Post" (after release, must have action copy like Watch Now)')
     parser.add_argument("--output", type=Path, default=None, help="Save report to a file")
     args = parser.parse_args()
 
@@ -411,15 +575,31 @@ def main():
 
     # Build and send API request
     client = anthropic.Anthropic()
-    content = build_content_blocks(args.image, args.guidelines, args.languages, args.asset_type, args.prime_original)
+    content = build_content_blocks(args.image, args.guidelines, args.languages, args.asset_type, args.prime_original, args.pre_or_post)
 
     print(f"Analyzing {args.image.name}...", file=sys.stderr)
-    response = client.messages.create(
-        model="claude-sonnet-4-5-20250929",
-        max_tokens=4096,
-        system=SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": content}],
-    )
+
+    # Retry logic for API overload errors
+    max_retries = 5
+    retry_delay = 2  # seconds
+
+    for attempt in range(max_retries):
+        try:
+            response = client.messages.create(
+                model="claude-opus-4-6",
+                max_tokens=4096,
+                system=SYSTEM_PROMPT,
+                messages=[{"role": "user", "content": content}],
+            )
+            break  # Success, exit retry loop
+        except anthropic.OverloadedError as e:
+            if attempt < max_retries - 1:
+                wait_time = retry_delay * (2 ** attempt)  # Exponential backoff
+                print(f"⏳ API overloaded, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})", file=sys.stderr)
+                time.sleep(wait_time)
+            else:
+                print(f"❌ API overloaded after {max_retries} attempts. Please try again in a few minutes.", file=sys.stderr)
+                sys.exit(1)
 
     # Extract text response
     raw_text = response.content[0].text

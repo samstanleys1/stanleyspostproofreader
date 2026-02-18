@@ -610,7 +610,7 @@ def main():
                 messages=[{"role": "user", "content": content}],
             )
             break  # Success, exit retry loop
-        except anthropic.OverloadedError as e:
+        except anthropic.APIStatusError as e:
             if attempt < max_retries - 1:
                 wait_time = retry_delay * (2 ** attempt)  # Exponential backoff
                 print(f"⏳ API overloaded, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})", file=sys.stderr)

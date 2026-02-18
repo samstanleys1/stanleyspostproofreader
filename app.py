@@ -181,7 +181,7 @@ if uploaded_files:
                     try:
                         response = client.messages.create(
                             model="claude-opus-4-6",
-                            max_tokens=4096,
+                            max_tokens=16384,
                             system=SYSTEM_PROMPT,
                             messages=[{"role": "user", "content": content}],
                         )
@@ -208,9 +208,15 @@ if uploaded_files:
                         r"```(?:json)?\s*\n?(.*?)\n?```", raw_text, re.DOTALL
                     )
                     if match:
-                        data = json.loads(match.group(1))
+                        try:
+                            data = json.loads(match.group(1))
+                        except json.JSONDecodeError:
+                            st.error(f"Could not parse API response for {uploaded_image.name}")
+                            st.code(raw_text)
+                            continue
                     else:
                         st.error(f"Could not parse API response for {uploaded_image.name}")
+                        st.write("**Raw API response:**")
                         st.code(raw_text)
                         continue
 

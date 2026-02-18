@@ -324,33 +324,51 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
     """Build the content blocks for the Claude API request."""
     blocks = []
 
-    # Detect orientation from image dimensions
-    img = Image.open(image_path)
-    width, height = img.size
-    orientation = "Landscape" if width > height else "Portrait"
+    is_pdf = image_path.suffix.lower() == ".pdf"
 
-    # Add the main image
-    img_data, img_mime = encode_file(image_path)
-    blocks.append({
-        "type": "image",
-        "source": {
-            "type": "base64",
-            "media_type": img_mime,
-            "data": img_data,
-        },
-    })
+    # Detect orientation from image dimensions (skip for PDFs)
+    if is_pdf:
+        orientation = None
+    else:
+        img = Image.open(image_path)
+        width, height = img.size
+        orientation = "Landscape" if width > height else "Portrait"
+
+    # Add the main file (PDF as document, image as image)
+    file_data, file_mime = encode_file(image_path)
+    if is_pdf:
+        blocks.append({
+            "type": "document",
+            "source": {
+                "type": "base64",
+                "media_type": file_mime,
+                "data": file_data,
+            },
+        })
+    else:
+        blocks.append({
+            "type": "image",
+            "source": {
+                "type": "base64",
+                "media_type": file_mime,
+                "data": file_data,
+            },
+        })
 
     # Determine color mode based on asset type
     color_mode = "CMYK" if asset_type in ["OOH", "T-Sides"] else "RGB"
 
-    asset_info = f"Above is the image to proofread. Expected languages: {languages}."
+    asset_info = f"Above is the {'document' if is_pdf else 'image'} to proofread. Expected languages: {languages}."
 
     # Add orientation instruction
-    asset_info += f"\n\nORIENTATION: {orientation}"
-    if orientation == "Landscape":
-        asset_info += "\nIMPORTANT: This is a LANDSCAPE image (wider than tall). Apply landscape-specific rules: Container at top, Border 2.5%, TT within 2.5% of border."
+    if orientation:
+        asset_info += f"\n\nORIENTATION: {orientation}"
+        if orientation == "Landscape":
+            asset_info += "\nIMPORTANT: This is a LANDSCAPE image (wider than tall). Apply landscape-specific rules: Container at top, Border 2.5%, TT within 2.5% of border."
+        else:
+            asset_info += "\nIMPORTANT: This is a PORTRAIT image (taller than wide). Apply portrait-specific rules: Container at side, Border 5%, TT within 5% of border."
     else:
-        asset_info += "\nIMPORTANT: This is a PORTRAIT image (taller than wide). Apply portrait-specific rules: Container at side, Border 5%, TT within 5% of border."
+        asset_info += "\n\nORIENTATION: Unable to auto-detect (PDF input). Please determine orientation from the document content and apply the appropriate rules."
 
     # Add color mode instruction
     asset_info += f"\n\nCOLOR MODE: {color_mode}"
@@ -543,9 +561,9 @@ def format_report(data: dict) -> str:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Proofread JPEG images for spelling, grammar, translation, and brand compliance issues."
+        description="Proofread images or PDFs for spelling, grammar, translation, and brand compliance issues."
     )
-    parser.add_argument("image", type=Path, help="Path to the JPEG image to proofread")
+    parser.add_argument("image", type=Path, help="Path to the image (JPEG/PNG) or PDF to proofread")
     parser.add_argument("--guidelines", type=Path, default=None, help="Path to brand guidelines (PDF or image)")
     parser.add_argument("--languages", type=str, default="English", help='Expected languages, comma-separated (default: "English")')
     parser.add_argument("--asset-type", type=str, default="General",

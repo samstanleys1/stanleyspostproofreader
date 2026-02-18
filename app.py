@@ -60,7 +60,7 @@ if LOGO_PATH.exists():
 
 st.title("Proofreader")
 st.markdown(
-    "Upload a product image to check for spelling, grammar, translation, "
+    "Upload a product image or PDF to check for spelling, grammar, translation, "
     "and brand-compliance issues."
 )
 
@@ -120,15 +120,15 @@ with st.sidebar:
         st.success("\n\n".join(brand_files_loaded))
 
 # --------------- main area ---------------
-uploaded_images = st.file_uploader(
-    "Upload image(s) to proofread",
-    type=["jpg", "jpeg", "png", "gif", "webp"],
+uploaded_files = st.file_uploader(
+    "Upload file(s) to proofread",
+    type=["jpg", "jpeg", "png", "gif", "webp", "pdf"],
     accept_multiple_files=True,
-    help="You can upload multiple images at once (max 500MB per file)",
+    help="You can upload multiple images or PDFs at once (max 500MB per file)",
 )
 
-if uploaded_images:
-    st.info(f"📁 {len(uploaded_images)} image(s) uploaded")
+if uploaded_files:
+    st.info(f"📁 {len(uploaded_files)} file(s) uploaded")
 
     # Initialize session state for results
     if "analysis_results" not in st.session_state:
@@ -162,7 +162,7 @@ if uploaded_images:
         asset_type_clean = asset_type.split(" (")[0] if " (" in asset_type else asset_type
 
         # Process each image
-        for img_idx, uploaded_image in enumerate(uploaded_images, 1):
+        for img_idx, uploaded_image in enumerate(uploaded_files, 1):
             # Save uploaded file to temp path
             with tempfile.NamedTemporaryFile(
                 suffix=Path(uploaded_image.name).suffix, delete=False
@@ -215,15 +215,19 @@ if uploaded_images:
 
     # ---- Display results (outside button block so it persists) ----
     if st.session_state.analysis_results:
-        for img_idx, uploaded_image in enumerate(uploaded_images, 1):
+        for img_idx, uploaded_image in enumerate(uploaded_files, 1):
             if uploaded_image.name not in st.session_state.analysis_results:
                 continue
 
             data = st.session_state.analysis_results[uploaded_image.name]
 
             st.divider()
-            st.header(f"Image {img_idx}/{len(uploaded_images)}: {uploaded_image.name}")
-            st.image(uploaded_image, caption=uploaded_image.name, use_container_width=True)
+            is_pdf = uploaded_image.name.lower().endswith(".pdf")
+            st.header(f"File {img_idx}/{len(uploaded_files)}: {uploaded_image.name}")
+            if is_pdf:
+                st.info(f"📄 PDF file: {uploaded_image.name}")
+            else:
+                st.image(uploaded_image, caption=uploaded_image.name, use_container_width=True)
 
             # ---- display report ----
             st.subheader("Extracted Text")

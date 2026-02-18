@@ -296,8 +296,11 @@ def compress_image(path: Path, max_dimension: int = 5000, max_size_mb: float = 4
     return buffer.getvalue()
 
 
-def pdf_to_images(pdf_path: Path, dpi: int = 150) -> list[tuple[bytes, int, int]]:
+def pdf_to_images(pdf_path: Path, dpi: int = 100) -> list[tuple[bytes, int, int]]:
     """Convert each page of a PDF to a compressed JPEG image.
+
+    Uses 100 DPI by default — sufficient for text/layout proofreading
+    while keeping token usage within API limits.
 
     Returns a list of (jpeg_bytes, width, height) tuples.
     """
@@ -310,16 +313,17 @@ def pdf_to_images(pdf_path: Path, dpi: int = 150) -> list[tuple[bytes, int, int]
 
         # Compress to JPEG
         buffer = io.BytesIO()
-        img.save(buffer, format="JPEG", quality=85, optimize=True)
+        img.save(buffer, format="JPEG", quality=75, optimize=True)
 
-        # If still too large, reduce quality
-        while len(buffer.getvalue()) > 4 * 1024 * 1024 and dpi > 72:
-            dpi -= 25
-            mat = fitz.Matrix(dpi / 72, dpi / 72)
+        # If still too large, reduce further
+        page_dpi = dpi
+        while len(buffer.getvalue()) > 3 * 1024 * 1024 and page_dpi > 72:
+            page_dpi -= 10
+            mat = fitz.Matrix(page_dpi / 72, page_dpi / 72)
             pix = page.get_pixmap(matrix=mat)
             img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
             buffer = io.BytesIO()
-            img.save(buffer, format="JPEG", quality=80, optimize=True)
+            img.save(buffer, format="JPEG", quality=70, optimize=True)
 
         results.append((buffer.getvalue(), pix.width, pix.height))
     doc.close()

@@ -14,7 +14,6 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from proofreader import (
-    BRAND_GUIDELINES_PATH,
     BRAND_RULES_PATH,
     LANGUAGE_TO_CTA_SHEET,
     SYSTEM_PROMPT,
@@ -110,14 +109,8 @@ with st.sidebar:
     )
 
     # Show info about auto-loaded brand compliance files
-    brand_files_loaded = []
     if BRAND_RULES_PATH.exists():
-        brand_files_loaded.append(f"✓ Brand rules: {BRAND_RULES_PATH.name}")
-    if BRAND_GUIDELINES_PATH.exists() and guidelines_file is None:
-        brand_files_loaded.append(f"✓ Visual examples: {BRAND_GUIDELINES_PATH.name}")
-
-    if brand_files_loaded:
-        st.success("\n\n".join(brand_files_loaded))
+        st.success(f"✓ Brand rules: {BRAND_RULES_PATH.name}")
 
 # --------------- main area ---------------
 uploaded_files = st.file_uploader(
@@ -150,9 +143,6 @@ if uploaded_files:
             ) as tmp_guide:
                 tmp_guide.write(guidelines_file.getvalue())
                 guidelines_path = Path(tmp_guide.name)
-        elif BRAND_GUIDELINES_PATH.exists():
-            # Auto-load default brand guidelines if no custom file uploaded
-            guidelines_path = BRAND_GUIDELINES_PATH
 
         languages_str = ", ".join(languages) if languages else "English"
         client = anthropic.Anthropic(api_key=api_key)

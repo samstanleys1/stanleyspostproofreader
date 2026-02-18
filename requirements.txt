@@ -3,3 +3,4 @@ openpyxl
 streamlit
 Pillow
 python-dotenv
+PyMuPDF

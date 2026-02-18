@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 
 import anthropic
+import fitz  # PyMuPDF
 import openpyxl
 from PIL import Image
 import io
@@ -295,6 +296,36 @@ def compress_image(path: Path, max_dimension: int = 5000, max_size_mb: float = 4
     return buffer.getvalue()
 
 
+def pdf_to_images(pdf_path: Path, dpi: int = 150) -> list[tuple[bytes, int, int]]:
+    """Convert each page of a PDF to a compressed JPEG image.
+
+    Returns a list of (jpeg_bytes, width, height) tuples.
+    """
+    doc = fitz.open(pdf_path)
+    results = []
+    for page in doc:
+        mat = fitz.Matrix(dpi / 72, dpi / 72)
+        pix = page.get_pixmap(matrix=mat)
+        img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+
+        # Compress to JPEG
+        buffer = io.BytesIO()
+        img.save(buffer, format="JPEG", quality=85, optimize=True)
+
+        # If still too large, reduce quality
+        while len(buffer.getvalue()) > 4 * 1024 * 1024 and dpi > 72:
+            dpi -= 25
+            mat = fitz.Matrix(dpi / 72, dpi / 72)
+            pix = page.get_pixmap(matrix=mat)
+            img = Image.frombytes("RGB", [pix.width, pix.height], pix.samples)
+            buffer = io.BytesIO()
+            img.save(buffer, format="JPEG", quality=80, optimize=True)
+
+        results.append((buffer.getvalue(), pix.width, pix.height))
+    doc.close()
+    return results
+
+
 def encode_file(path: Path) -> tuple[str, str]:
     """Read a file and return (base64_data, media_type)."""
     mime_type, _ = mimetypes.guess_type(str(path))
@@ -326,49 +357,48 @@ def build_content_blocks(image_path: Path, guidelines_path: Path | None, languag
 
     is_pdf = image_path.suffix.lower() == ".pdf"
 
-    # Detect orientation from image dimensions (skip for PDFs)
     if is_pdf:
-        orientation = None
+        # Convert PDF pages to compressed images for token efficiency
+        page_images = pdf_to_images(image_path)
+        # Detect orientation from first page
+        first_w, first_h = page_images[0][1], page_images[0][2]
+        orientation = "Landscape" if first_w > first_h else "Portrait"
+        # Add each page as an image block
+        for page_data, _, _ in page_images:
+            encoded = base64.standard_b64encode(page_data).decode("utf-8")
+            blocks.append({
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": "image/jpeg",
+                    "data": encoded,
+                },
+            })
     else:
         img = Image.open(image_path)
         width, height = img.size
         orientation = "Landscape" if width > height else "Portrait"
-
-    # Add the main file (PDF as document, image as image)
-    file_data, file_mime = encode_file(image_path)
-    if is_pdf:
-        blocks.append({
-            "type": "document",
-            "source": {
-                "type": "base64",
-                "media_type": file_mime,
-                "data": file_data,
-            },
-        })
-    else:
+        img_data, img_mime = encode_file(image_path)
         blocks.append({
             "type": "image",
             "source": {
                 "type": "base64",
-                "media_type": file_mime,
-                "data": file_data,
+                "media_type": img_mime,
+                "data": img_data,
             },
         })
 
     # Determine color mode based on asset type
     color_mode = "CMYK" if asset_type in ["OOH", "T-Sides"] else "RGB"
 
-    asset_info = f"Above is the {'document' if is_pdf else 'image'} to proofread. Expected languages: {languages}."
+    asset_info = f"Above is the {'PDF (rendered as images)' if is_pdf else 'image'} to proofread. Expected languages: {languages}."
 
     # Add orientation instruction
-    if orientation:
-        asset_info += f"\n\nORIENTATION: {orientation}"
-        if orientation == "Landscape":
-            asset_info += "\nIMPORTANT: This is a LANDSCAPE image (wider than tall). Apply landscape-specific rules: Container at top, Border 2.5%, TT within 2.5% of border."
-        else:
-            asset_info += "\nIMPORTANT: This is a PORTRAIT image (taller than wide). Apply portrait-specific rules: Container at side, Border 5%, TT within 5% of border."
+    asset_info += f"\n\nORIENTATION: {orientation}"
+    if orientation == "Landscape":
+        asset_info += "\nIMPORTANT: This is a LANDSCAPE image (wider than tall). Apply landscape-specific rules: Container at top, Border 2.5%, TT within 2.5% of border."
     else:
-        asset_info += "\n\nORIENTATION: Unable to auto-detect (PDF input). Please determine orientation from the document content and apply the appropriate rules."
+        asset_info += "\nIMPORTANT: This is a PORTRAIT image (taller than wide). Apply portrait-specific rules: Container at side, Border 5%, TT within 5% of border."
 
     # Add color mode instruction
     asset_info += f"\n\nCOLOR MODE: {color_mode}"

@@ -187,12 +187,16 @@ if uploaded_files:
                         )
                         break  # Success, exit retry loop
                     except anthropic.APIStatusError as e:
-                        if attempt < max_retries - 1:
-                            wait_time = retry_delay * (2 ** attempt)  # Exponential backoff
-                            st.warning(f"⏳ API overloaded, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
-                            time.sleep(wait_time)
+                        if e.status_code == 529:  # Overloaded
+                            if attempt < max_retries - 1:
+                                wait_time = retry_delay * (2 ** attempt)
+                                st.warning(f"⏳ API overloaded, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})")
+                                time.sleep(wait_time)
+                            else:
+                                st.error(f"❌ API overloaded after {max_retries} attempts. Please try again in a few minutes.")
+                                st.stop()
                         else:
-                            st.error(f"❌ API overloaded after {max_retries} attempts. Please try again in a few minutes.")
+                            st.error(f"❌ API error ({e.status_code}): {e.message}")
                             st.stop()
 
                 raw_text = response.content[0].text

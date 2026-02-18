@@ -611,12 +611,16 @@ def main():
             )
             break  # Success, exit retry loop
         except anthropic.APIStatusError as e:
-            if attempt < max_retries - 1:
-                wait_time = retry_delay * (2 ** attempt)  # Exponential backoff
-                print(f"⏳ API overloaded, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})", file=sys.stderr)
-                time.sleep(wait_time)
+            if e.status_code == 529:  # Overloaded
+                if attempt < max_retries - 1:
+                    wait_time = retry_delay * (2 ** attempt)
+                    print(f"⏳ API overloaded, retrying in {wait_time}s... (attempt {attempt + 1}/{max_retries})", file=sys.stderr)
+                    time.sleep(wait_time)
+                else:
+                    print(f"❌ API overloaded after {max_retries} attempts. Please try again in a few minutes.", file=sys.stderr)
+                    sys.exit(1)
             else:
-                print(f"❌ API overloaded after {max_retries} attempts. Please try again in a few minutes.", file=sys.stderr)
+                print(f"❌ API error ({e.status_code}): {e.message}", file=sys.stderr)
                 sys.exit(1)
 
     # Extract text response
